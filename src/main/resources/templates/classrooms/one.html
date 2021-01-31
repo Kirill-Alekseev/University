@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Classroom</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="p-3 mb-2 bg-light text-dark">
+<div th:replace="index.html :: navbar"></div>
+<div class="container-fluid" style="padding-top: 60px">
+    <h2>Classroom</h2>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Capacity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:object="${classroom}">
+            <td th:text="*{id}">Id</td>
+            <td th:text="*{name}">Name</td>
+            <td th:text="*{capacity}">Capacity</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <h3>Edit classroom</h3>
+    <form class="form-horizontal" th:action="@{/classrooms/edit}" th:object="${classroom}" th:method="PATCH">
+        <div class="form-group">
+            <label>Id:</label>
+            <input class="form-control" readonly th:value="*{id}" type="number" name="id">
+        </div>
+        <div class="form-group">
+            <label>Name:</label>
+            <input class="form-control" type="text" th:field="*{name}">
+            <small class="text-danger" th:if="${#fields.hasErrors('name')}"
+                   th:errors="*{name}">Name Error</small>
+        </div>
+        <div class="form-group">
+            <label>Capacity:</label>
+            <input class="form-control" type="number" th:field="*{capacity}">
+            <small class="text-danger" th:if="${#fields.hasErrors('capacity')}"
+                   th:errors="*{capacity}">Capacity Error</small>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-success" value="Enter">
+        </div>
+    </form>
+    <br>
+
+    <h3>
+        <a href="/classrooms">To classrooms</a>
+    </h3>
+</div>
+</body>
+</html>

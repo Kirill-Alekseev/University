@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Specialties Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="p-3 mb-2 bg-light text-dark">
+<div th:insert="index.html :: navbar"></div>
+<div class="container-fluid" style="padding-top: 60px">
+    <h2>Specialties List</h2>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Faculty</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${specialties.isEmpty()}">
+            <td colspan="4">No Specialties Available</td>
+        </tr>
+        <tr th:each="specialty : ${specialties}" th:object="${specialty}">
+            <td><a th:href="@{/specialties/{id}(id=*{id})}" th:text="*{id}"></a></td>
+            <td><span th:text="*{name}"></span></td>
+            <td><a th:href="@{/faculties/{id}(id=*{faculty.id})}" th:text="*{faculty.name}"></a></td>
+            <td>
+                <form th:action="@{/specialties/remove/{id}(id=*{id})}" th:method="DELETE">
+                    <input type="submit" class="btn btn-danger" value="Delete">
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <h3>Add specialty</h3>
+    <form class="form-horizontal" action="/specialties/add" th:object="${specialty}" th:method="POST">
+        <div class="form-group">
+            <label>Name:</label>
+            <input class="form-control" type="text" th:field="*{name}">
+            <small class="text-danger" th:if="${#fields.hasErrors('name')}"
+                   th:errors="*{name}"></small>
+        </div>
+        <div class="form-group">
+            <label>Faculty: </label>
+            <select class="form-control" th:field="*{faculty}">
+                <option value="0"></option>
+                <option th:each="faculty : ${faculties}" th:value="${faculty.id}"
+                        th:text="${faculty.name}">
+                </option>
+            </select>
+            <small class="text-danger" th:if="${#fields.hasErrors('faculty')}"
+                   th:errors="*{faculty}"></small>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-success" value="Enter">
+        </div>
+    </form>
+    <br>
+
+    <h3>
+        <a href="/">Home</a>
+    </h3>
+</div>
+</body>
+</html>

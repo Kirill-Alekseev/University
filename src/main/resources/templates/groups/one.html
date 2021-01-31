@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Group</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="p-3 mb-2 bg-light text-dark">
+<div th:insert="index.html :: navbar"></div>
+<div class="container-fluid" style="padding-top: 60px">
+    <h2>Group</h2>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Course</th>
+            <th>Specialty</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:object="${group}">
+            <td><span th:text="*{id}"></span></td>
+            <td><span th:text="*{name}"></span></td>
+            <td><span th:text="*{course}"></span></td>
+            <td><a th:href="@{/specialties/{id}(id=*{specialty.id})}" th:text="*{specialty.name}"></a></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <div>
+        <h3>Students in group</h3>
+    </div>
+    <table class="table table-bordered table-condensed">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${group.students.isEmpty()}">
+            <td colspan="4">No students in group</td>
+        </tr>
+        <tr th:each="student : ${group.students}" th:object="${student}">
+            <td><a th:href="@{/students/{id}(id=*{id})}" th:text="*{id}"></a></td>
+            <td><span th:text="*{firstName}"></span></td>
+            <td><span th:text="*{lastName}"></span></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <h3>Edit group</h3>
+    <form class="form-horizontal" action="/groups/edit" th:object="${group}" th:method="PATCH">
+        <div class="form-group">
+            <label>Id:</label>
+            <input class="form-control" readonly th:value="*{id}" type="number" name="id">
+        </div>
+        <div class="form-group">
+            <label>Name:</label>
+            <input class="form-control" type="text" th:field="*{name}">
+            <small class="text-danger" th:if="${#fields.hasErrors('name')}"
+                   th:errors="*{name}"></small>
+        </div>
+        <div class="form-group">
+            <label>Course:</label>
+            <input class="form-control" type="number" th:field="*{course}">
+            <small class="text-danger" th:if="${#fields.hasErrors('course')}"
+                   th:errors="*{course}"></small>
+        </div>
+        <div class="form-group">
+            <label>Specialty: </label>
+            <select class="form-control" th:field="*{specialty}">
+                <option value="0"></option>
+                <option th:each="specialty : ${specialties}" th:value="${specialty.id}"
+                        th:text="${specialty.name}">
+                </option>
+            </select>
+            <small class="text-danger" th:if="${#fields.hasErrors('specialty')}"
+                   th:errors="*{specialty}"></small>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-success" value="Enter">
+        </div>
+    </form>
+    <br>
+
+    <h3>
+        <a href="/groups">To groups</a>
+    </h3>
+</div>
+</body>
+</html>

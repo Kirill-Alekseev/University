@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="p-3 mb-2 bg-light text-dark">
+<div th:insert="index.html :: navbar"></div>
+<div class="container-fluid" style="padding-top: 60px">
+    <h2>Student</h2>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Group</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Birth date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:object="${student}">
+            <td th:text="*{id}">Id</td>
+            <td th:text="*{firstName}">First Name</td>
+            <td th:text="*{lastName}">Last Name</td>
+            <td><a th:href="@{/groups/{id}(id=*{group.id})}" th:text="*{group.name}"></a></td>
+            <td th:text="*{email}"></td>
+            <td th:text="*{phoneNumber}"></td>
+            <td th:text="*{birthDate}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <h3>Edit student</h3>
+    <form class="form-horizontal" action="/students/edit" th:object="${student}" th:method="PATCH">
+        <div class="form-group">
+            <label>Id:</label>
+            <input class="form-control" readonly th:value="*{id}" name="id" type="number">
+        </div>
+        <div class="form-group">
+            <label>First Name:</label>
+            <input class="form-control" type="text" th:field="*{firstName}">
+            <small class="text-danger" th:if="${#fields.hasErrors('firstName')}"
+                   th:errors="*{firstName}"></small>
+        </div>
+        <div class="form-group">
+            <label>Last Name:</label>
+            <input class="form-control" type="text" th:field="*{lastName}">
+            <small class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+                   th:errors="*{lastName}"></small>
+        </div>
+        <div class="form-group">
+            <label>Group: </label>
+            <select class="form-control" th:field="*{group}">
+                <option value="0"></option>
+                <option th:each="group : ${groups}" th:value="${group.id}"
+                        th:text="${group.name}">
+                </option>
+            </select>
+            <small class="text-danger" th:if="${#fields.hasErrors('group')}"
+                   th:errors="*{group}"></small>
+        </div>
+        <div class="form-group">
+            <label>Email:</label>
+            <input class="form-control" type="text" th:field="*{email}">
+            <small class="text-danger" th:if="${#fields.hasErrors('email')}"
+                   th:errors="*{email}"></small>
+        </div>
+        <div class="form-group">
+            <label>Phone Number:</label>
+            <input class="form-control" type="text" th:field="*{phoneNumber}">
+            <small class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}"
+                   th:errors="*{phoneNumber}"></small>
+        </div>
+        <div class="form-group">
+            <label>Birth Date:</label>
+            <input class="form-control" type="date" th:field="*{birthDate}">
+            <small class="text-danger" th:if="${#fields.hasErrors('birthDate')}"
+                   th:errors="*{birthDate}"></small>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-success" value="Enter">
+        </div>
+    </form>
+    <br>
+
+    <h3>
+        <a href="/students">To students</a>
+    </h3>
+</div>
+</body>
+</html>

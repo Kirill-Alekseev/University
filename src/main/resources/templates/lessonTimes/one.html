@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson Time page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="p-3 mb-2 bg-light text-dark">
+<div th:insert="index.html :: navbar"></div>
+<div class="container-fluid" style="padding-top: 60px">
+    <h2>Lesson Time</h2>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Begin Time</th>
+            <th>End Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:object="${lessonTime}">
+            <td><span th:text="*{id}"></span></td>
+            <td><span th:text="*{beginTime}"></span></td>
+            <td><span th:text="*{endTime}"></span></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <h3>Edit Lesson Time</h3>
+    <form class="form-horizontal" action="/lessonTimes/edit" th:object="${lessonTime}" th:method="PATCH">
+        <div class="form-group">
+            <label>Id:</label>
+            <input class="form-control" readonly type="number" th:value="*{id}" name="id">
+        </div>
+        <div class="form-group">
+            <label>Begin Time:</label>
+            <input class="form-control" type="time" th:field="*{beginTime}">
+            <small class="text-danger" th:if="${#fields.hasErrors('beginTime')}"
+                   th:errors="*{beginTime}"></small>
+        </div>
+        <div class="form-group">
+            <label>End Time:</label>
+            <input class="form-control" type="time" th:field="*{endTime}">
+            <small class="text-danger" th:if="${#fields.hasErrors('endTime')}"
+                   th:errors="*{endTime}"></small>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-success" value="Enter">
+        </div>
+    </form>
+    <br>
+
+    <h3>
+        <a href="/lessonTimes">To lesson times</a>
+    </h3>
+</div>
+</body>
+</html>

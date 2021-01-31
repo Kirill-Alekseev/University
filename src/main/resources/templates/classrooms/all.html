@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Classrooms Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="p-3 mb-2 bg-light text-dark">
+<div th:insert="index.html :: navbar"></div>
+<div class="container-fluid" style="padding-top: 60px">
+    <h2>Classrooms List</h2>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Capacity</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${classrooms.isEmpty()}">
+            <td colspan="4">No Classrooms Available</td>
+        </tr>
+        <tr th:each="classroom : ${classrooms}" th:object="${classroom}">
+            <td><a th:href="@{/classrooms/{id}(id=*{id})}" th:text="*{id}"></a></td>
+            <td><span th:text="*{name}"></span></td>
+            <td><span th:text="*{capacity}"></span></td>
+            <td>
+                <form th:action="@{/classrooms/remove/{id}(id=*{id})}" th:method="DELETE">
+                    <input type="submit" class="btn btn-danger" value="Delete">
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <h3>Add classroom</h3>
+    <form class="form-horizontal" th:action="@{/classrooms/add}" th:object="${classroom}" th:method="POST">
+        <div class="form-group">
+            <label>Name:</label>
+            <input class="form-control" type="text" th:field="*{name}">
+            <small class="text-danger" th:if="${#fields.hasErrors('name')}"
+                   th:errors="*{name}">Name Error</small>
+        </div>
+        <div class="form-group">
+            <label>Capacity:</label>
+            <input class="form-control" type="number" th:field="*{capacity}">
+            <small class="text-danger" th:if="${#fields.hasErrors('capacity')}"
+                   th:errors="*{capacity}">Capacity Error</small>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-success" value="Enter">
+        </div>
+    </form>
+    <br>
+
+    <h3>
+        <a href="/">Home</a>
+    </h3>
+</div>
+</body>
+</html>

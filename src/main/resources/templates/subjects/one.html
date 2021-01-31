@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Subject</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="p-3 mb-2 bg-light text-dark">
+<div th:insert="index.html :: navbar"></div>
+<div class="container-fluid" style="padding-top: 60px">
+    <h2>Subject</h2>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Cathedra</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:object="${subject}">
+            <td th:text="*{id}"></td>
+            <td th:text="*{name}"></td>
+            <td><a th:href="@{/cathedras/{id}(id=*{cathedra.id})}" th:text="*{cathedra.name}"></a></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <h3>Edit subject</h3>
+    <form class="form-horizontal" action="/subjects/edit" th:object="${subject}" th:method="PATCH">
+        <div class="form-group">
+            <label>Id:</label>
+            <input class="form-control" readonly th:value="*{id}" type="number" name="id">
+        </div>
+        <div class="form-group">
+            <label>Name:</label>
+            <input class="form-control" type="text" th:field="*{name}">
+            <small class="text-danger" th:if="${#fields.hasErrors('name')}"
+                   th:errors="*{name}"></small>
+        </div>
+        <div class="form-group">
+            <label>Cathedra: </label>
+            <select class="form-control" th:field="*{cathedra}">
+                <option value="0"></option>
+                <option th:each="cathedra : ${cathedras}" th:value="${cathedra.id}"
+                        th:text="${cathedra.name}">
+                </option>
+            </select>
+            <small class="text-danger" th:if="${#fields.hasErrors('cathedra')}"
+                   th:errors="*{cathedra}"></small>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-success" value="Enter">
+        </div>
+    </form>
+    <br>
+
+    <h3>
+        <a href="/subjects">To subjects</a>
+    </h3>
+</div>
+</body>
+</html>

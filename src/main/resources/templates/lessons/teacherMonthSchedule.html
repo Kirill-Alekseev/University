@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .border {
+            display: inline-block;
+            width: auto;
+            height: auto;
+            margin: fill;
+        }
+    </style>
+</head>
+<body class="p-3 mb-2 bg-light text-dark">
+<div th:insert="index.html :: navbar"></div>
+<div class="container-fluid" style="padding-top: 60px">
+    <div th:object="${teacher}">
+        <h2><span th:text="*{firstName +' '+lastName+' '}"></span>teacher month schedule</h2>
+    </div>
+
+    <div class="row h-auto w-auto">
+        <div class="col border border-dark h-auto w-auto" th:each="date : ${dates}" th:object="${date}">
+            <div>
+                <strong><span th:text="${date}+' | '+${#temporals.dayOfWeekName(date)}"></span></strong>
+                <table class="table table-bordered table-sm table-hover h-auto w-auto">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Subject</th>
+                        <th>Classroom</th>
+                        <th>Group</th>
+                        <th>Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(dto.getLessonsByDate(date))}">
+                        <td colspan="5" style="color: red">No Lessons</td>
+                    </tr>
+                    <tr th:each="lesson : ${dto.getLessonsByDate(date)}" th:object="${lesson}">
+                        <td><a th:href="@{/lessons/{id}(id=*{id})}" th:text="*{id}"></a></td>
+                        <td><span th:text="*{subject.name}"></span></td>
+                        <td><span th:text="*{classroom.name}"></span></td>
+                        <td><span th:text="*{group.name}"></span></td>
+                        <td>
+                            <span th:text="*{#temporals.format(lessonTime.beginTime, 'HH:mm')+'-'+#temporals.format(lessonTime.endTime, 'HH:mm')}"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <br><br>
+    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#teacherMonthSchedule">Get teacher
+        schedule
+    </button>
+    <div id="teacherMonthSchedule" class="collapse">
+        <form class="form-horizontal" action="/lessons/teacherMonthSchedule" th:object="${teacher}" method="GET">
+            <div class="form-group">
+                <label>Teacher Id:</label>
+                <input class="form-control" type="number" name="teacherId" th:value="*{id}">
+            </div>
+            <div class="form-group">
+                <label>Month:</label>
+                <input class="form-control" type="month" name="yearMonth">
+            </div>
+            <div>
+                <input type="submit" class="btn btn-success" value="Enter">
+            </div>
+        </form>
+    </div>
+    <br>
+
+    <h3>
+        <a href="/lessons">To lessons</a>
+    </h3>
+</div>
+</body>
+</html>

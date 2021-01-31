@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:university
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  jpa:
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: validate
+  data:
+    web:
+      pageable:
+        default-page-size: 20
+  h2:
+    console:
+      enabled: true
+
+logging:
+  config: classpath:logback.xml
+
+university:
+  lessons:
+    begin: "08:00"
+    end: "18:15"
+    duration:
+      lesson: 90
+      break: 15
+  students:
+    max-students-in-group: 30

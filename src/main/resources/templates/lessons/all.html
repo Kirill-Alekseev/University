@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lessons page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="p-3 mb-2 bg-light text-dark">
+<div th:insert="index.html :: navbar"></div>
+<div class="container-fluid" style="padding-top: 60px">
+    <h2>Lessons List</h2>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Subject</th>
+            <th>Classroom</th>
+            <th>Teacher</th>
+            <th>Group</th>
+            <th>Date</th>
+            <th>Begin</th>
+            <th>End</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${lessons.isEmpty()}">
+            <td colspan="4">No Lessons Available</td>
+        </tr>
+        <tr th:each="lesson : ${lessons}" th:object="${lesson}">
+            <td><a th:href="@{/lessons/{id}(id=*{id})}" th:text="*{id}"></a></td>
+            <td>
+                <a style="color: black"
+                   th:href="@{/subjects/{id}(id=*{subject.id})}" th:text="*{subject.name}">
+                </a>
+            </td>
+            <td>
+                <a style="color: black"
+                   th:href="@{/classrooms/{id}(id=*{classroom.id})}" th:text="*{classroom.name}">
+                </a>
+            </td>
+            <td>
+                <a style="color: black"
+                   th:href="@{/teachers/{id}(id=*{teacher.id})}"
+                   th:text="*{teacher.firstName + ' ' + teacher.lastName}">
+                </a>
+            </td>
+            <td>
+                <a style="color: black"
+                   th:href="@{/groups/{id}(id=*{group.id})}" th:text="*{group.name}">
+                </a>
+            </td>
+            <td th:text="*{date}"></td>
+            <td>
+                <a style="color: black"
+                   th:href="@{/lessonTimes/{id}(id=*{lessonTime.id})}"
+                   th:text="*{lessonTime.beginTime}">
+                </a>
+            </td>
+            <td>
+                <a style="color: black"
+                   th:href="@{/lessonTimes/{id}(id=*{lessonTime.id})}"
+                   th:text="*{lessonTime.endTime}">
+                </a>
+            </td>
+            <td>
+                <form th:action="@{/lessons/remove/{id}(id=*{id})}" th:method="DELETE">
+                    <input type="submit" class="btn btn-danger" value="Delete">
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <h3>Add lesson</h3>
+    <form class="form-horizontal" action="/lessons/add" th:object="${lesson}" th:method="POST">
+        <div class="form-group">
+            <label>Subject: </label>
+            <select class="form-control" th:field="*{subject}">
+                <option value="0"></option>
+                <option th:each="subject : ${subjects}" th:value="${subject.id}"
+                        th:text="${subject.name}">
+                </option>
+            </select>
+            <small class="text-danger" th:if="${#fields.hasErrors('subject')}"
+                   th:errors="*{subject}"></small>
+        </div>
+        <div class="form-group">
+            <label>Classroom: </label>
+            <select class="form-control" th:field="*{classroom}">
+                <option value="0"></option>
+                <option th:each="classroom : ${classrooms}" th:value="${classroom.id}"
+                        th:text="${classroom.name}">
+                </option>
+            </select>
+            <small class="text-danger" th:if="${#fields.hasErrors('classroom')}"
+                   th:errors="*{classroom}"></small>
+        </div>
+        <div class="form-group">
+            <label>Teacher: </label>
+            <select class="form-control" th:field="*{teacher}">
+                <option value="0"></option>
+                <option th:each="teacher : ${teachers}" th:value="${teacher.id}"
+                        th:text="${teacher.firstName + ' ' + teacher.lastName}">
+                </option>
+            </select>
+            <small class="text-danger" th:if="${#fields.hasErrors('teacher')}"
+                   th:errors="*{teacher}"></small>
+        </div>
+        <div class="form-group">
+            <label>Group: </label>
+            <select class="form-control" th:field="*{group}">
+                <option value="0"></option>
+                <option th:each="group : ${groups}" th:value="${group.id}"
+                        th:text="${group.name}">
+                </option>
+            </select>
+            <small class="text-danger" th:if="${#fields.hasErrors('group')}"
+                   th:errors="*{group}"></small>
+        </div>
+        <div class="form-group">
+            <label>Date:</label>
+            <input class="form-control" type="date" th:field="*{date}">
+            <small class="text-danger" th:if="${#fields.hasErrors('date')}"
+                   th:errors="*{date}"></small>
+        </div>
+        <div class="form-group">
+            <label>Lesson Time: </label>
+            <select class="form-control" th:field="*{lessonTime}">
+                <option value="0"></option>
+                <option th:each="lessonTime : ${lessonTimes}" th:value="${lessonTime.id}"
+                        th:text="${lessonTime.beginTime + '-' + lessonTime.endTime}">
+                </option>
+            </select>
+            <small class="text-danger" th:if="${#fields.hasErrors('lessonTime')}"
+                   th:errors="*{lessonTime}"></small>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-success" value="Enter">
+        </div>
+    </form>
+    <br>
+
+    <!--  Group Buttons  -->
+    <div class="row">
+        <div class="col">
+            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#groupMonthSchedule">
+                Group month schedule
+            </button>
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#groupDaySchedule">
+                Group day schedule
+            </button>
+        </div>
+    </div>
+    <!--  Group Forms  -->
+    <div class="row">
+        <div class="col collapse" id="groupMonthSchedule">
+            <form action="/lessons/groupMonthSchedule" method="GET">
+                <div class="form-group">
+                    <label>Group: </label>
+                    <select class="form-control" name="group">
+                        <option value="0"></option>
+                        <option th:each="group : ${groups}" th:value="${group.id}"
+                                th:text="${group.name}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Month:</label>
+                    <input class="form-control" type="month" name="yearMonth">
+                </div>
+                <div>
+                    <input type="submit" class="btn btn-success" value="Enter">
+                </div>
+            </form>
+        </div>
+        <div class="col collapse" id="groupDaySchedule">
+            <form action="/lessons/groupDaySchedule" method="GET">
+                <div class="form-group">
+                    <label>Group: </label>
+                    <select class="form-control" name="group">
+                        <option value="0"></option>
+                        <option th:each="group : ${groups}" th:value="${group.id}"
+                                th:text="${group.name}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date:</label>
+                    <input class="form-control" type="date" name="date">
+                </div>
+                <div>
+                    <input type="submit" class="btn btn-success" value="Enter">
+                </div>
+            </form>
+        </div>
+    </div>
+    <br><br>
+
+    <!--  Teacher Buttons  -->
+    <div class="row">
+        <div class="col">
+            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#teacherMonthSchedule">
+                Teacher month schedule
+            </button>
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#teacherDaySchedule">
+                Teacher day schedule
+            </button>
+        </div>
+    </div>
+    <!--  Teacher Forms  -->
+    <div class="row">
+        <div class="col collapse" id="teacherMonthSchedule">
+            <form class="form-horizontal" action="/lessons/teacherMonthSchedule" method="GET">
+                <div class="form-group">
+                    <label>Teacher: </label>
+                    <select class="form-control" name="teacher">
+                        <option value="0"></option>
+                        <option th:each="teacher : ${teachers}"
+                                th:value="${teacher.id}"
+                                th:text="${teacher.firstName + ' ' + teacher.lastName}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Month:</label>
+                    <input class="form-control" type="month" name="yearMonth">
+                </div>
+                <div>
+                    <input type="submit" class="btn btn-success" value="Enter">
+                </div>
+            </form>
+        </div>
+        <div class="col collapse" id="teacherDaySchedule">
+            <form class="form-horizontal" action="/lessons/teacherDaySchedule" method="GET">
+                <div class="form-group">
+                    <label>Teacher: </label>
+                    <select class="form-control" name="teacher">
+                        <option value="0"></option>
+                        <option th:each="teacher : ${teachers}"
+                                th:value="${teacher.id}"
+                                th:text="${teacher.firstName + ' ' + teacher.lastName}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date:</label>
+                    <input class="form-control" type="date" name="date">
+                </div>
+                <div>
+                    <input type="submit" class="btn btn-success" value="Enter">
+                </div>
+            </form>
+        </div>
+    </div>
+    <br><br>
+
+    <h3>
+        <a href="/">Home</a>
+    </h3>
+</div>
+</body>
+</html>

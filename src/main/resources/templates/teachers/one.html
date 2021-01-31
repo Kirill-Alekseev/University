@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="p-3 mb-2 bg-light text-dark">
+<div th:insert="index.html :: navbar"></div>
+<div class="container-fluid" style="padding-top: 60px">
+    <h2>Teacher</h2>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:object="${teacher}">
+            <td th:text="*{id}"></td>
+            <td th:text="*{firstName}"></td>
+            <td th:text="*{lastName}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <div>
+        <h3>Teacher subjects</h3>
+    </div>
+    <table class="table table-bordered table-condensed">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Cathedra</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${teacher.subjects.isEmpty()}">
+            <td colspan="4">No subjects</td>
+        </tr>
+        <tr th:each="subject : ${teacher.subjects}" th:object="${subject}">
+            <td><a th:href="@{/subjects/{id}(id=*{id})}" th:text="*{id}"></a></td>
+            <td><span th:text="*{name}"></span></td>
+            <td><span th:text="*{cathedra.name}"></span></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <div>
+        <h3>Teacher cathedras</h3>
+    </div>
+    <table class="table table-bordered table-condensed">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Faculty</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${teacher.cathedras.isEmpty()}">
+            <td colspan="4">No cathedras</td>
+        </tr>
+        <tr th:each="cathedra : ${teacher.cathedras}" th:object="${cathedra}">
+            <td><a th:href="@{/cathedras/{id}(id=*{id})}" th:text="*{id}"></a></td>
+            <td><span th:text="*{name}"></span></td>
+            <td><span th:text="*{faculty.name}"></span></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <h3>Edit Teacher</h3>
+    <form class="form-horizontal" action="/teachers/edit" th:object="${teacher}" th:method="PATCH">
+        <div>
+            <div class="form-group">
+                <label>Id:</label>
+                <input class="form-control" readonly th:value="*{id}" type="number" name="id">
+            </div>
+            <div class="form-group">
+                <label>First Name:</label>
+                <input class="form-control" type="text" th:field="*{firstName}" th:value="*{firstName}">
+                <small class="text-danger" th:if="${#fields.hasErrors('firstName')}"
+                       th:errors="*{firstName}"></small>
+            </div>
+            <div class="form-group">
+                <label>Last Name:</label>
+                <input class="form-control" type="text" th:field="*{lastName}" th:value="*{lastName}">
+                <small class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+                       th:errors="*{lastName}"></small>
+            </div>
+            <br>
+            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#subjects">EDIT SUBJECTS
+            </button>
+            <div id="subjects" class="collapse">
+                <p><strong>Select subjects from the list below:</strong></p>
+                <div class="form-group" th:each="subject : ${subjects}">
+                    <label th:for="${subject.id}" th:text="${subject.name}"></label>
+                    <input class="form-check"
+                           th:id="${subject.id}" th:checked="${teacher.getSubjects().contains(subject)}"
+                           type="checkbox"
+                           name="subjects" th:value="${subject.id}">
+                </div>
+            </div>
+            <br><br>
+            <div>
+                <input type="submit" class="btn btn-success" value="Enter">
+            </div>
+        </div>
+    </form>
+    <br>
+
+    <h3>
+        <a href="/teachers">To teachers</a>
+    </h3>
+</div>
+</body>
+</html>

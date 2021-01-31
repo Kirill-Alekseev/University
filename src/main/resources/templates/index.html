@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="p-3 mb-2 bg-light text-dark">
+<div th:fragment="navbar">
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="/">University</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="/faculties">Faculties</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/specialties">Specialties</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/groups">Groups</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/students">Students</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/cathedras">Cathedras</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/subjects">Subjects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/teachers">Teachers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/lessons">Lessons</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/lessonTimes">Lesson Times</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/classrooms">Classrooms</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+</div>
+</body>
+</html>
